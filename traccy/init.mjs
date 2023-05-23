@@ -2,8 +2,11 @@ import { ethers } from "ethers";
 import fs from "fs";
 import dotenv from "dotenv";
 
-const PAYMENT_ABI = JSON.parse(
-  fs.readFileSync("./artifacts/contracts/payment.sol/payment.json")
+const PAYMENT = JSON.parse(
+  fs.readFileSync("./artifacts/contracts/payment.sol/PaymentContract.json")
+);
+const ERC20 = JSON.parse(
+  fs.readFileSync("./artifacts/contracts/utils/MockERC20.sol/MockERC20.json")
 );
 dotenv.config();
 
@@ -26,13 +29,20 @@ async function main() {
   if (!pk) return;
 
   const PAYMENT_CONTRACT = "0xC566F4a74518b3A8cB74Cbb84718E081687017EC";
+  const TRCYC_CONTRACT = "0x131C6A669e275c0B10d565c7F7c319B89450dbf2";
 
   const provider = new ethers.providers.JsonRpcProvider(
-    CHAINS_CONFIG.avax_testnet.rpc
+    CHAINS_CONFIG.avax_mainnet.rpc
   );
   const signer = new ethers.Wallet(pk, provider);
-  const contract = new ethers.Contract(PAYMENT_CONTRACT, PAYMENT_ABI.abi, signer);
+  const paymentContract = new ethers.Contract(PAYMENT_CONTRACT, PAYMENT.abi, signer);
+  const trcycContract = new ethers.Contract(TRCYC_CONTRACT, ERC20.abi, signer);
 
   let res;
+  res = await trcycContract.increaseAllowance(paymentContract.address, "25000000000000000000000");
+  console.log(res);
+
+  res = await trcycContract.allowance(signer.address, paymentContract.address);
+  console.log(signer.address, paymentContract.address, res.toString())
 }
 main();

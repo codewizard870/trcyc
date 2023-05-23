@@ -22,7 +22,7 @@ contract PaymentContract is Ownable{
 
       TRCYC_ADDRESS = 0xC566F4a74518b3A8cB74Cbb84718E081687017EC; //18 decimals
       USDC_ADDRESS = 0xB97EF9Ef8734C71904D8002F8b6Bc66Dd9c48a6E; //6 decimals
-      USDT_ADDRESS = 0xc7198437980c041c805A1EDcbA50c1Ce5db95118; //6 decimals
+      USDT_ADDRESS = 0x9702230A8Ea53601f5cD2dc00fDBc13d4dF4A8c7; //6 decimals
     }
     
     function SetConfig(uint256 price, address treasury) public onlyOwner {
